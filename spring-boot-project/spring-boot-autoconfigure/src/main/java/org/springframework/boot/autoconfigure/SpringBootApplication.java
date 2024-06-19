@@ -54,7 +54,7 @@ import org.springframework.data.repository.Repository;
 @SpringBootConfiguration//标识一个配置类
 @EnableAutoConfiguration//开启自动装配
 @ComponentScan(excludeFilters = { @Filter(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),
-		@Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) })
+		@Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) }) //注解扫描 通过value basePackages
 public @interface SpringBootApplication {
 
 	/**
