@@ -328,7 +328,7 @@ public class SpringApplication {
 			// 初始化SpringBootExceptionReporter，用来支持报告启动的错误
 			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
 					new Class[] { ConfigurableApplicationContext.class }, context);
-			// 4.刷新应用上下文前的准备阶段
+			// 4.刷新应用上下文前的准备阶段 将@SpringApplication及其他的一些配置 加载到BeanDefinitionMap中
 			prepareContext(context, environment, listeners, applicationArguments, printedBanner);
 			// 5.刷新应用上下文
 			refreshContext(context);
@@ -388,9 +388,12 @@ public class SpringApplication {
 
 	private void prepareContext(ConfigurableApplicationContext context, ConfigurableEnvironment environment,
 			SpringApplicationRunListeners listeners, ApplicationArguments applicationArguments, Banner printedBanner) {
+		// 设置容器环境
 		context.setEnvironment(environment);
+		// 执行容器后置处理
 		postProcessApplicationContext(context);
 		applyInitializers(context);
+		//向各个监听器发送容器已经准备好的事件
 		listeners.contextPrepared(context);
 		if (this.logStartupInfo) {
 			logStartupInfo(context.getParent() == null);
@@ -398,8 +401,10 @@ public class SpringApplication {
 		}
 		// Add boot specific singleton beans
 		ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+		//将main函数中args参数封装成单例Bean,注册进容器
 		beanFactory.registerSingleton("springApplicationArguments", applicationArguments);
 		if (printedBanner != null) {
+			//将printedBanner,注册进容器
 			beanFactory.registerSingleton("springBootBanner", printedBanner);
 		}
 		if (beanFactory instanceof DefaultListableBeanFactory) {
@@ -412,7 +417,9 @@ public class SpringApplication {
 		// Load the sources
 		Set<Object> sources = getAllSources();
 		Assert.notEmpty(sources, "Sources must not be empty");
+		// 加载我们的启动类，将启动类注入到容器
 		load(context, sources.toArray(new Object[0]));
+		// 向各个监听器发送容器加载完成的事件
 		listeners.contextLoaded(context);
 	}
 
@@ -707,6 +714,7 @@ public class SpringApplication {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Loading source " + StringUtils.arrayToCommaDelimitedString(sources));
 		}
+		//创建 BeanDefinitionLoader
 		BeanDefinitionLoader loader = createBeanDefinitionLoader(getBeanDefinitionRegistry(context), sources);
 		if (this.beanNameGenerator != null) {
 			loader.setBeanNameGenerator(this.beanNameGenerator);
@@ -737,7 +745,6 @@ public class SpringApplication {
 	 */
 	public ClassLoader getClassLoader() {
 		if (this.resourceLoader != null) {
-			return this.resourceLoader.getClassLoader();
 		}
 		return ClassUtils.getDefaultClassLoader();
 	}

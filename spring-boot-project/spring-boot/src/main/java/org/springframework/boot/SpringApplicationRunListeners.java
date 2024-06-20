@@ -48,18 +48,31 @@ class SpringApplicationRunListeners {
 		}
 	}
 
+
+	/**
+	 * environment构建完成，ApplicationContext创建之前，该方法被调用
+	 * @param environment
+	 */
 	void environmentPrepared(ConfigurableEnvironment environment) {
 		for (SpringApplicationRunListener listener : this.listeners) {
 			listener.environmentPrepared(environment);
 		}
 	}
 
+	/**
+	 * ApplicationContext构建完成，该方法被调用
+	 * @param context
+	 */
 	void contextPrepared(ConfigurableApplicationContext context) {
 		for (SpringApplicationRunListener listener : this.listeners) {
 			listener.contextPrepared(context);
 		}
 	}
 
+	/**
+	 * ApplicationContext完成加载，但没有被刷新前，该方法被调用
+	 * @param context
+	 */
 	void contextLoaded(ConfigurableApplicationContext context) {
 		for (SpringApplicationRunListener listener : this.listeners) {
 			listener.contextLoaded(context);
