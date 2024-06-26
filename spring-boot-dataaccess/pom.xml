@@ -30,6 +30,22 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+<!--		JSR107-->
+		<dependency>
+			<groupId>javax.cache</groupId>
+			<artifactId>cache-api</artifactId>
+		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.slf4j</groupId>-->
+<!--			<artifactId>slf4j-log4j12</artifactId>-->
+<!--		</dependency>-->
+<!--		-->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid-spring-boot-starter</artifactId>
+			<version>1.2.15</version> <!-- 使用最新的版本 -->
+		</dependency>
+
 
 		<dependency>
 			<groupId>mysql</groupId>

@@ -40,6 +40,7 @@ abstract class DataSourceConfiguration {
 
 	@SuppressWarnings("unchecked")
 	protected static <T> T createDataSource(DataSourceProperties properties, Class<? extends DataSource> type) {
+		//使用DataSourceBuilder建造数据源，利用反射创建type数据源，然后绑定相关属性
 		return (T) properties.initializeDataSourceBuilder().type(type).build();
 	}
 
